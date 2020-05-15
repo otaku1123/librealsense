@@ -1382,6 +1382,7 @@ namespace librealsense
         }
         _profiles_to_processing_block.erase(begin(_profiles_to_processing_block), end(_profiles_to_processing_block));
         _cached_requests.erase(_cached_requests.begin(), _cached_requests.end());
+        _post_process_callback.reset();
     }
 
     template<class T>
@@ -1389,8 +1390,7 @@ namespace librealsense
     {
         return {
             new internal_frame_callback<T>(callback),
-            [](rs2_frame_callback* p) { /*p->release(); */}
-        };
+            [](rs2_frame_callback *p) { p->release(); }};
     }
 
     std::shared_ptr<stream_profile_interface> synthetic_sensor::filter_frame_by_requests(const frame_interface* f)
